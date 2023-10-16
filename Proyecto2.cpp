@@ -234,11 +234,10 @@ public:
     string telefono;
     vector<int> articulos;
 
-    Fabrica(int id, string nombre, string telefono, vector<int> articulos) {
+    Fabrica(int id, string nombre, string telefono) {
         this->id = id;
         this->nombre = nombre;
         this->telefono = telefono;
-        this->articulos = articulos;
     }
 
     void mostrar() {
@@ -252,10 +251,16 @@ public:
         cout << endl;
     }
 
+    // Método para agregar artículos
+    void agregarArticulos(vector<int> nuevosArticulos) {
+        articulos = nuevosArticulos;
+    }
+
     // Operación crear fábrica
     Fabrica* crearFabrica(int id, string nombre, string telefono, vector<int> articulos) {
         // Crea un nuevo objeto de la clase Fabrica con los datos especificados.
-        Fabrica* fabrica = new Fabrica(id, nombre, telefono, articulos);
+        Fabrica* fabrica = new Fabrica(id, nombre, telefono);
+        fabrica->agregarArticulos(articulos);
 
         return fabrica;
     }
@@ -345,12 +350,19 @@ public:
 
 // 3 fábricas
 
-    vector<Fabrica*> fabrica;
+    vector<Fabrica*> fabricas;
 
+    Fabrica* fabrica1 = new Fabrica(1, "Fábrica 1", "555-555-5555");
+    fabrica1->agregarArticulos({ 7 });
+    fabricas.push_back(fabrica1);
 
-    fabrica.push_back(new Fabrica(1, "Fábrica 1", "555-555-5555", 7));
-    fabrica.push_back(new Fabrica(2, "Fábrica 2", "666-666-6666", 17));
-    fabrica.push_back(new Fabrica(3, "Fábrica 3", "777-777-7777", 13));
+    Fabrica* fabrica2 = new Fabrica(2, "Fábrica 2", "666-666-6666");
+    fabrica2->agregarArticulos({ 17 });
+    fabricas.push_back(fabrica2);
+
+    Fabrica* fabrica3 = new Fabrica(3, "Fábrica 3", "777-777-7777");
+    fabrica3->agregarArticulos({ 13 });
+    fabricas.push_back(fabrica3);
 
 
 
@@ -396,16 +408,16 @@ public:
     }
 
 
-    // Mostrar la información de los pedidos en un bucle
-    for (size_t i = 0; i < fabrica.size(); i++) {
-        cout << "Información de la fabrica " << i + 1 << ":\n";
-        fabrica[i]->mostrar();
+    // Mostrar la información de las fábricas en un bucle
+    for (size_t i = 0; i < fabricas.size(); i++) {
+        cout << "Información de la fábrica " << i + 1 << ":\n";
+        fabricas[i]->mostrar();
         cout << "\n";
     }
 
-    // Liberar la memoria de las instancias de pedidos
-    for (size_t i = 0; i < fabrica.size(); i++) {
-        delete fabrica[i];
+    // Liberar la memoria de las instancias de fábricas
+    for (size_t i = 0; i < fabricas.size(); i++) {
+        delete fabricas[i];
     }
 
 
