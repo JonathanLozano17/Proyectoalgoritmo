@@ -21,10 +21,6 @@
 using namespace std;
 
 
-
-int main() {
-
-
 //Generacion de las clases necesarias y sus respectivos procedimientos
 
 // Clase cliente
@@ -84,7 +80,7 @@ public:
         cliente->descuento = descuento;
     }
 
-    
+
     // Operación eliminar cliente
     void eliminarCliente(Cliente* cliente) {
         // Elimina el objeto cliente.
@@ -285,6 +281,12 @@ public:
 
 
 };
+
+
+
+
+int main() {
+
 
 
 //Realizar el ingreso de datos a cada una de las clases
