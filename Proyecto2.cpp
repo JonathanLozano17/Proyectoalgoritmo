@@ -17,6 +17,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+//#define CP_UTF8 65001 
 
 using namespace std;
 
@@ -228,12 +229,14 @@ public:
     int id;
     string nombre;
     string telefono;
+    int cantidadArticulosProveidos;
     vector<int> articulos;
 
     Fabrica(int id, string nombre, string telefono) {
         this->id = id;
         this->nombre = nombre;
         this->telefono = telefono;
+        this->cantidadArticulosProveidos = 0;  // Inicializa en 0
     }
 
     void mostrar() {
@@ -245,12 +248,27 @@ public:
             cout << articulos[i] << " ";
         }
         cout << endl;
+
+        // Agregar la siguiente línea para mostrar la cantidad total de artículos proveídos
+        cout << "Cantidad total de artículos proveídos: " << cantidadArticulosProveidos << endl;
+
     }
+
+   
 
     // Método para agregar artículos
     void agregarArticulos(vector<int> nuevosArticulos) {
         articulos = nuevosArticulos;
+        cantidadArticulosProveidos += nuevosArticulos.size();  // Incrementa la cantidad total
+
+        // Imprimir la lista de artículos relacionados para verificar
+        cout << "Artículos relacionados actualizados: ";
+        for (int i = 0; i < articulos.size(); i++) {
+            cout << articulos[i] << " ";
+        }
+        cout << endl;
     }
+
 
     // Operación crear fábrica
     Fabrica* crearFabrica(int id, string nombre, string telefono, vector<int> articulos) {
@@ -363,7 +381,7 @@ int main() {
     fabricas.push_back(fabrica2);
 
     Fabrica* fabrica3 = new Fabrica(3, "Fábrica 3", "777-777-7777");
-    fabrica3->agregarArticulos({ 13 });
+    fabrica3->agregarArticulos({ 13 , 17, 15});
     fabricas.push_back(fabrica3);
 
 
@@ -417,10 +435,12 @@ int main() {
         cout << "\n";
     }
 
+
     // Liberar la memoria de las instancias de fábricas
     for (size_t i = 0; i < fabricas.size(); i++) {
         delete fabricas[i];
     }
+
 
 
     return 0;
@@ -428,3 +448,7 @@ int main() {
 
 
 }
+
+
+
+  
