@@ -256,6 +256,10 @@ public:
 
    
 
+    }
+
+
+
     // Método para agregar artículos
     void agregarArticulos(vector<int> nuevosArticulos) {
         articulos = nuevosArticulos;
@@ -302,28 +306,27 @@ public:
 
 
 
-
 int main() {
 
 
 
-//Realizar el ingreso de datos a cada una de las clases
+    //Realizar el ingreso de datos a cada una de las clases
 
-    // 3 clientes
+        // 3 clientes
 
-    //Se agrega la informacion a un vector para poder usarlo con un for
+        //Se agrega la informacion a un vector para poder usarlo con un for
     vector<Cliente*> clientes;
-    
+
     clientes.push_back(new Cliente(1, "Juan", "Pérez", "Calle 123, Ciudad de México", "555-555-5555", 10000, 20000, 10));
     clientes.push_back(new Cliente(2, "Ana", "García", "Calle 456, Bogotá", "333-333-3333", 5000, 10000, 5));
     clientes.push_back(new Cliente(3, "María", "Rodríguez", "Calle 789, Buenos Aires", "222-222-2222", 2000, 5000, 2));
 
-    
 
 
-// 20 artículos
 
-    // Crear un vector de objetos de la clase Articulo
+    // 20 artículos
+
+        // Crear un vector de objetos de la clase Articulo
     vector<Articulo*> articulos;
 
     // Agregar artículos al vector
@@ -350,7 +353,7 @@ int main() {
 
 
 
-// 10 pedidos
+    // 10 pedidos
 
 
     vector<Pedido*> pedidos;
@@ -368,7 +371,7 @@ int main() {
     pedidos.push_back(new Pedido(10, 1, "Calle 123, Ciudad de México", "2023-07-29", { 1, 2, 3 }, { 10, 20, 30 }));
 
 
-// 3 fábricas
+    // 3 fábricas
 
     vector<Fabrica*> fabricas;
 
@@ -381,23 +384,19 @@ int main() {
     fabricas.push_back(fabrica2);
 
     Fabrica* fabrica3 = new Fabrica(3, "Fábrica 3", "777-777-7777");
-    fabrica3->agregarArticulos({ 13 , 17, 15});
+    fabrica3->agregarArticulos({ 13 , 17, 15 });
     fabricas.push_back(fabrica3);
 
 
 
-//***********************Mostrar informacion ingresada*****************************************************+
-    // Mostrar la información de los clientes en un bucle
+    //***********************Mostrar informacion ingresada*****************************************************+
+        // Mostrar la información de los clientes en un bucle
     for (size_t i = 0; i < clientes.size(); i++) {
         cout << "Información del Cliente " << i + 1 << ":\n";
         clientes[i]->mostrar();
         cout << "\n";
     }
 
-    // Liberar la memoria de las instancias de clientes
-    for (size_t i = 0; i < clientes.size(); i++) {
-        delete clientes[i];
-    }
 
 
 
@@ -422,11 +421,6 @@ int main() {
         cout << "\n";
     }
 
-    // Liberar la memoria de las instancias de pedidos
-    for (size_t i = 0; i < pedidos.size(); i++) {
-        delete pedidos[i];
-    }
-
 
     // Mostrar la información de las fábricas en un bucle
     for (size_t i = 0; i < fabricas.size(); i++) {
@@ -436,14 +430,143 @@ int main() {
     }
 
 
+    //***********************Inicializar el programa para realizar el paso a seguir*****************************************************+
+
+
+    // Crear una instancia de Cliente
+    Cliente cliente(5, "", "", "", "", 0, 0, 0);
+
+    // Solicitar al usuario que ingrese el nombre
+    cout << "Ingrese el nombre del cliente: ";
+    getline(cin, cliente.nombre);
+
+    // Solicitar al usuario que ingrese la dirección
+    cout << "Ingrese la dirección del cliente: ";
+    getline(cin, cliente.direccion);
+
+    // Asignar valores a otros campos de cliente
+    cliente.id = 5;
+    cliente.apellido = "Pérez";
+    cliente.telefono = "555-555-5555";
+    cliente.saldo = 10000;
+    cliente.descuento = 0;
+
+    // Calcular y asignar el límite de crédito en función del saldo
+    if (cliente.saldo >= 10000) {
+        cliente.limite_credito = 3000000; // Límite máximo
+    }
+    else if (cliente.saldo >= 5000) {
+        cliente.limite_credito = 2000000;
+    }
+    else {
+        cliente.limite_credito = 1000000; // Límite mínimo
+    }
+
+    //***********************Bucle para Inicializar el programa para realizar el paso a seguir*****************************************************+
+
+
+    string continuar = "si";
+    while (continuar != "n")
+    {
+
+
+
+
+
+
+
+        //***********************Inicializar la parte de compra de articulos*****************************************************+
+
+
+
+
+
+
+
+       // ID del cliente que está realizando la compra
+        int idCliente = 3; // Puedes cambiar esto según tus necesidades
+
+        // Mostrar lista de artículos disponibles
+        for (int i = 0; i < articulos.size(); i++) {
+            cout << "ID: " << articulos[i]->id << ", Descripción: " << articulos[i]->descripcion << ", Precio: " << articulos[i]->precio << ", Existencias: ";
+            for (int j = 0; j < articulos[i]->existencias.size(); j++) {
+                cout << "Fábrica " << articulos[i]->fabricas[j] << ": " << articulos[i]->existencias[j] << " ";
+            }
+            cout << endl;
+        }
+
+        // Permitir al cliente seleccionar un artículo
+        int idArticulo;
+        int cantidadComprar;
+
+        cout << "Ingrese el ID del artículo que desea comprar: ";
+        cin >> idArticulo;
+
+        cout << "Ingrese la cantidad que desea comprar: ";
+        cin >> cantidadComprar;
+
+        // Buscar el artículo seleccionado
+        Articulo* articuloComprado = nullptr;
+        for (int i = 0; i < articulos.size(); i++) {
+            if (articulos[i]->id == idArticulo) {
+                articuloComprado = articulos[i];
+                break;
+            }
+        }
+
+
+        // Mostrar los datos del cliente
+        cout << "Datos del cliente:" << endl;
+        cout << "Nombre: " << cliente.nombre << endl;
+        cout << "Apellido: " << cliente.apellido << endl;
+        cout << "Dirección: " << cliente.direccion << endl;
+        cout << "Teléfono: " << cliente.telefono << endl;
+        cout << "Saldo: " << cliente.saldo << endl;
+        cout << "Límite de crédito: " << cliente.limite_credito << endl;
+        cout << "Descuento: " << cliente.descuento << endl;
+
+
+    
+
+        //Finalizar programa
+        cout << "Desea continuar? y/n \n";
+
+        cin >> continuar;
+    
+    }
+
+
+    //***********************Eliminar el cache*****************************************************+
+
+    // Liberar la memoria de las instancias de clientes
+    for (size_t i = 0; i < clientes.size(); i++) {
+        delete clientes[i];
+    }
+
+
+
+    // Liberar la memoria de las instancias de artículos
+    for (size_t i = 0; i < articulos.size(); i++) {
+        delete articulos[i];
+    }
+
+
+    // Liberar la memoria de las instancias de pedidos
+    for (size_t i = 0; i < pedidos.size(); i++) {
+        delete pedidos[i];
+    }
+
+
+
     // Liberar la memoria de las instancias de fábricas
     for (size_t i = 0; i < fabricas.size(); i++) {
         delete fabricas[i];
     }
 
-
-
     return 0;
+
+
+
 
 
 
