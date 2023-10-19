@@ -39,6 +39,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <map>
 //#define CP_UTF8 65001 
 
 using namespace std;
@@ -296,7 +297,7 @@ public:
 
 
     // Método para obtener una fábrica por ID
-    Fabrica* Fabrica::obtenerFabricaPorId(int fabricaId) {
+    Fabrica* obtenerFabricaPorId(int fabricaId) {
         vector<Fabrica*> fabricas;
 
         for (int i = 0; i < fabricas.size(); i++) {
@@ -309,14 +310,20 @@ public:
 
 
 
-    void obtenerExistenciasArticulo(int articuloId) {
+
+    int obtenerExistenciasArticulos(int fabricaId) {
+        vector<int> existencias;
+
         for (int i = 0; i < articulos.size(); i++) {
-            if (articulos[i].id == articuloId) {
-                return articulos[i].existencias;
+            if (articulos[i].fabricas.contains(fabricaId)) {
+                existencias.push_back(articulos[i].existencias[fabricaId]);
             }
         }
-        return 0;
+
+        return existencias.size() > 0 ? existencias : vector<int>();
     }
+
+
 
 
     void actualizarExistenciasArticulo(int articuloId, int nuevasExistencias) {
