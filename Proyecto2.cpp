@@ -12,6 +12,28 @@
 //Nota2 : límite de crédito = 3000.000
 //Nota 3 : mínimo 20 artículos con su stock descripción y precio
 //Nota 4 : proveedor de los artículos
+// 
+//No superar el valor de precio de 3.000.000 y el usuario debe ingresar el nombre y debe comprar y se tiene un inventario y un stock
+//y se va decrementando del stock, y diga cuanto saldo quedo y exista algun articulo que tenga descuento, y diga que cosas se comrparon 
+// y el valor que quedo restante 
+
+//
+//Objetivo: Crear un programa que gestione los clientes, artículos y pedidos de una empresa.
+//
+//Datos :
+//
+//    Cliente : Cada cliente tiene un número único, una o más direcciones de envío, un saldo, un límite de crédito y un descuento.El límite de crédito no puede superar los 3.000.000 pts.
+//    Artículo : Cada artículo tiene un número único, una descripción, un precio y una o más fábricas que lo distribuyen.Cada fábrica tiene un número único, un teléfono de contacto y un stock de cada artículo que provee.Se debe almacenar la información de las fábricas y sus artículos, incluyendo las fábricas alternativas si existen.
+//    Pedido : Cada pedido tiene una cabecera y un cuerpo.La cabecera contiene el número de cliente, la dirección de envío y la fecha(con hora) del pedido.El cuerpo contiene varias líneas, cada una con el número y la cantidad del artículo pedido.
+//    Requisitos :
+//
+//    El programa debe permitir al usuario ingresar su nombre y seleccionar uno de los tres almacenes disponibles.
+//    El programa debe mostrar al usuario los artículos disponibles en el almacén seleccionado, con su descripción, precio y stock.
+//    El programa debe permitir al usuario comprar uno o más artículos, siempre que no se supere el límite de crédito ni el stock del almacén.
+//    El programa debe aplicar el descuento correspondiente al cliente si existe.
+//    El programa debe actualizar el saldo del cliente y el stock del almacén después de cada compra.
+//    El programa debe mostrar al usuario el resumen del pedido, con los artículos comprados, sus precios, el total a pagar y el saldo restante.
+//    El programa debe guardar el pedido en un archivo con la información de la cabecera y el cuerpo.
 
 
 #include <iostream>
@@ -21,22 +43,24 @@
 
 using namespace std;
 
-
 //Generacion de las clases necesarias y sus respectivos procedimientos
 
 // Clase cliente
 class Cliente {
 public:
-    int id;
-    string nombre;
-    string apellido;
-    string direccion;
-    string telefono;
-    float saldo;
-    float limite_credito;
-    float descuento;
+    int id; // Identificador del cliente
+    string nombre; // Nombre del cliente
+    string apellido; // Apellido del cliente
+    string direccion; // Dirección del cliente
+    string telefono; // Número de teléfono del cliente
+    float saldo; // Saldo del cliente
+    float limite_credito; // Límite de crédito del cliente
+    float descuento; // Descuento aplicado al cliente
+    vector<string> compras; // Campo para almacenar las compras
 
-    Cliente(int id, string nombre, string apellido, string direccion, string telefono, float saldo, float limite_credito, float descuento) {
+
+    // Constructor para inicializar un cliente con todos los atributos
+    Cliente(int id, const string& nombre, const string& apellido, const string& direccion, const string& telefono, float saldo, float limite_credito, float descuento) {
         this->id = id;
         this->nombre = nombre;
         this->apellido = apellido;
@@ -47,8 +71,19 @@ public:
         this->descuento = descuento;
     }
 
+    // Constructor sin argumentos para crear un cliente vacío
+    Cliente() {
+        id = 0;
+        nombre = "";
+        apellido = "";
+        direccion = "";
+        telefono = "";
+        saldo = 0;
+        limite_credito = 0;
+        descuento = 0;
+    }
 
-
+    // Método para mostrar la información del cliente
     void mostrar() {
         cout << "ID: " << id << endl;
         cout << "Nombre: " << nombre << endl;
@@ -57,20 +92,22 @@ public:
         cout << "Teléfono: " << telefono << endl;
         cout << "Saldo: " << saldo << endl;
         cout << "Límite de crédito: " << limite_credito << endl;
-        cout << "Descuento: " << descuento << endl;
+        cout << "Descuento: " << descuento << "%" << endl;
     }
 
-    // Operación crear cliente
-    Cliente* crearCliente(int id, string nombre, string apellido, string direccion, string telefono, float saldo, float limite_credito, float descuento) {
-        // Crea un nuevo objeto de la clase Cliente con los datos especificados.
-        Cliente* cliente = new Cliente(id, nombre, apellido, direccion, telefono, saldo, limite_credito, descuento);
-
-        return cliente;
+    // Operación para registrar una compra
+    void registrarCompra(const string& descripcion) {
+        compras.push_back(descripcion);
     }
 
-    // Operación actualizar cliente
-    void actualizarCliente(Cliente* cliente, int id, string nombre, string apellido, string direccion, string telefono, float saldo, float limite_credito, float descuento) {
-        // Asigna los nuevos datos al objeto cliente.
+
+    // Operación crear cliente (puedes utilizarla para crear instancias de Cliente)
+    Cliente* crearCliente(int id, const string& nombre, const string& apellido, const string& direccion, const string& telefono, float saldo, float limite_credito, float descuento) {
+        return new Cliente(id, nombre, apellido, direccion, telefono, saldo, limite_credito, descuento);
+    }
+
+    // Operación actualizar cliente (para modificar los atributos de un cliente existente)
+    void actualizarCliente(Cliente* cliente, int id, const string& nombre, const string& apellido, const string& direccion, const string& telefono, float saldo, float limite_credito, float descuento) {
         cliente->id = id;
         cliente->nombre = nombre;
         cliente->apellido = apellido;
@@ -81,29 +118,24 @@ public:
         cliente->descuento = descuento;
     }
 
-
-    // Operación eliminar cliente
+    // Operación eliminar cliente (para liberar memoria al eliminar un cliente)
     void eliminarCliente(Cliente* cliente) {
-        // Elimina el objeto cliente.
         delete cliente;
     }
-
-
-
-
-
 };
+
 
 // Clase artículo
 class Articulo {
 public:
-    int id;
-    vector<int> fabricas;
-    vector<int> existencias;
-    string descripcion;
-    float precio;
+    int id; // Identificador del artículo
+    vector<int> fabricas; // Identificadores de las fábricas que producen este artículo
+    vector<int> existencias; // Cantidad de existencias en cada fábrica
+    string descripcion; // Descripción del artículo
+    float precio; // Precio del artículo
 
-    Articulo(int id, vector<int> fabricas, vector<int> existencias, string descripcion, float precio) {
+    // Constructor para inicializar un artículo
+    Articulo(int id, const vector<int>& fabricas, const vector<int>& existencias, const string& descripcion, float precio) {
         this->id = id;
         this->fabricas = fabricas;
         this->existencias = existencias;
@@ -111,20 +143,21 @@ public:
         this->precio = precio;
     }
 
+    // Método para mostrar la información del artículo
     void mostrar() {
         cout << "ID: " << id << endl;
-        cout << "Fabricas: " << endl;
+        cout << "Descripción: " << descripcion << endl;
+        cout << "Precio: " << precio << endl;
+        cout << "Fábricas: ";
         for (int i = 0; i < fabricas.size(); i++) {
             cout << fabricas[i] << " ";
         }
         cout << endl;
-        cout << "Existencias: " << endl;
+        cout << "Existencias en Fábricas: ";
         for (int i = 0; i < existencias.size(); i++) {
             cout << existencias[i] << " ";
         }
         cout << endl;
-        cout << "Descripción: " << descripcion << endl;
-        cout << "Precio: " << precio << endl;
     }
 
     // Operación crear artículo
@@ -232,6 +265,8 @@ public:
     int cantidadArticulosProveidos;
     vector<int> articulos;
 
+    static vector<Fabrica*> fabricas;
+
     Fabrica(int id, string nombre, string telefono) {
         this->id = id;
         this->nombre = nombre;
@@ -252,6 +287,52 @@ public:
         // Agregar la siguiente línea para mostrar la cantidad total de artículos proveídos
         cout << "Cantidad total de artículos proveídos: " << cantidadArticulosProveidos << endl;
 
+    }
+
+    // Métodos nuevos
+
+  
+    
+
+
+    // Método para obtener una fábrica por ID
+    Fabrica* Fabrica::obtenerFabricaPorId(int fabricaId) {
+        vector<Fabrica*> fabricas;
+
+        for (int i = 0; i < fabricas.size(); i++) {
+            if (fabricas[i]->id == fabricaId) {
+                return fabricas[i];
+            }
+        }
+        return nullptr;
+    }
+
+
+
+    void obtenerExistenciasArticulo(int articuloId) {
+        for (int i = 0; i < articulos.size(); i++) {
+            if (articulos[i].id == articuloId) {
+                return articulos[i].existencias;
+            }
+        }
+        return 0;
+    }
+
+
+    void actualizarExistenciasArticulo(int articuloId, int nuevasExistencias) {
+        for (int i = 0; i < articulos.size(); i++) {
+            if (articulos[i].id == articuloId) {
+                articulos[i].existencias = nuevasExistencias;
+                return;
+            }
+        }
+    }
+
+
+
+    // Función para agregar artículos a la fábrica
+    void agregarArticulos(const vector<Articulo>& nuevosArticulos) {
+        articulos.insert(articulos.end(), nuevosArticulos.begin(), nuevosArticulos.end());
     }
 
    
@@ -300,6 +381,30 @@ public:
 
 };
 
+
+//Structuras para poder ingresar la informacion actualizada
+//Structura cliente
+struct Clientees {
+    int id;
+    string nombre;
+    string direccion;
+    float saldo;
+    vector<string> compras;
+
+    Clientees(int id, string nombre, string direccion, float saldo)
+        : id(id), nombre(nombre), direccion(direccion), saldo(saldo) {}
+};
+
+//Estructura Articulo
+struct Articuloes {
+    int id;
+    string nombre;
+    float precio;
+    int existencias;
+
+    Articuloes(int id, string nombre, float precio, int existencias)
+        : id(id), nombre(nombre), precio(precio), existencias(existencias) {}
+};
 
 
 
@@ -394,12 +499,7 @@ int main() {
         cout << "\n";
     }
 
-    // Liberar la memoria de las instancias de clientes
-    for (size_t i = 0; i < clientes.size(); i++) {
-        delete clientes[i];
-    }
-
-
+   
 
     // Mostrar la información de los artículos en un bucle
     for (size_t i = 0; i < articulos.size(); i++) {
@@ -408,10 +508,6 @@ int main() {
         cout << "\n";
     }
 
-    // Liberar la memoria de las instancias de artículos
-    for (size_t i = 0; i < articulos.size(); i++) {
-        delete articulos[i];
-    }
 
 
 
@@ -422,12 +518,7 @@ int main() {
         cout << "\n";
     }
 
-    // Liberar la memoria de las instancias de pedidos
-    for (size_t i = 0; i < pedidos.size(); i++) {
-        delete pedidos[i];
-    }
-
-
+ 
     // Mostrar la información de las fábricas en un bucle
     for (size_t i = 0; i < fabricas.size(); i++) {
         cout << "Información de la fábrica " << i + 1 << ":\n";
@@ -436,11 +527,163 @@ int main() {
     }
 
 
+
+    //***********************Inicializar el programa para realizar el paso a seguir*****************************************************+
+
+
+
+
+    // Crear una instancia de Cliente
+    Cliente cliente(5, "", "", "", "", 0, 0, 0);
+
+    // Solicitar al usuario que ingrese el nombre
+    cout << "Ingrese el nombre del cliente: ";
+    getline(cin, cliente.nombre);
+
+    // Solicitar al usuario que ingrese la dirección
+    cout << "Ingrese la dirección del cliente: ";
+    getline(cin, cliente.direccion);
+
+    // Asignar valores a otros campos de cliente
+    cliente.id = 5; 
+    cliente.apellido = "Pérez"; 
+    cliente.telefono = "555-555-5555"; 
+    cliente.saldo = 10000; 
+    cliente.descuento = 0; 
+
+    // Calcular y asignar el límite de crédito en función del saldo
+    if (cliente.saldo >= 10000) {
+        cliente.limite_credito = 3000000; // Límite máximo
+    }
+    else if (cliente.saldo >= 5000) {
+        cliente.limite_credito = 2000000;
+    }
+    else {
+        cliente.limite_credito = 1000000; // Límite mínimo
+    }
+
+
+
+    //***********************Inicializar la parte de compra de articulos*****************************************************+
+
+
+
+
+
+
+
+   // ID del cliente que está realizando la compra
+    int idCliente = 3; // Puedes cambiar esto según tus necesidades
+
+    // Mostrar lista de artículos disponibles
+    for (int i = 0; i < articulos.size(); i++) {
+        cout << "ID: " << articulos[i]->id << ", Descripción: " << articulos[i]->descripcion << ", Precio: " << articulos[i]->precio << ", Existencias: ";
+        for (int j = 0; j < articulos[i]->existencias.size(); j++) {
+            cout << "Fábrica " << articulos[i]->fabricas[j] << ": " << articulos[i]->existencias[j] << " ";
+        }
+        cout << endl;
+    }
+
+    // Permitir al cliente seleccionar un artículo
+    int idArticulo;
+    int cantidadComprar;
+
+    cout << "Ingrese el ID del artículo que desea comprar: ";
+    cin >> idArticulo;
+
+    cout << "Ingrese la cantidad que desea comprar: ";
+    cin >> cantidadComprar;
+
+    // Buscar el artículo seleccionado
+    Articulo* articuloComprado = nullptr;
+    for (int i = 0; i < articulos.size(); i++) {
+        if (articulos[i]->id == idArticulo) {
+            articuloComprado = articulos[i];
+            break;
+        }
+    }
+
+    if (articuloComprado == nullptr) {
+        cout << "Artículo no encontrado." << endl;
+    }
+    else {
+        // Encontramos el artículo, ahora verificamos si el cliente tiene suficiente saldo
+        Cliente* clienteComprador = nullptr;
+        for (int i = 0; i < clientes.size(); i++) {
+            if (clientes[i]->id == idCliente) {
+                clienteComprador = clientes[i];
+                break;
+            }
+        }
+
+        if (clienteComprador == nullptr) {
+            cout << "Cliente no encontrado." << endl;
+        }
+
+        if (clienteComprador != nullptr && articuloComprado != nullptr) {
+            // Verificar en qué fábrica se encuentra el artículo
+            for (int i = 0; i < articuloComprado->fabricas.size(); i++) {
+                int fabricaId = articuloComprado->fabricas[i];
+                Fabrica* fabrica = obtenerFabricaPorId(fabricaId);
+                if (fabrica != nullptr) {
+                    int existenciasFabrica = fabrica->obtenerExistenciasArticulo(articuloComprado->id);
+                    if (existenciasFabrica >= cantidadComprar && clienteComprador->saldo >= (cantidadComprar * articuloComprado->precio)) {
+                        // Realizar la compra
+                        clienteComprador->saldo -= (cantidadComprar * articuloComprado->precio);
+                        fabrica->actualizarExistenciasArticulo(articuloComprado->id, existenciasFabrica - cantidadComprar);
+                        clienteComprador->compras.push_back(articuloComprado->descripcion);
+                        cout << "Compra exitosa." << endl;
+                        return;
+                    }
+                }
+            }
+            cout << "No se pudo realizar la compra. Saldo insuficiente o existencias agotadas." << endl;
+        }
+        else {
+            cout << "Cliente o artículo no válidos." << endl;
+        }
+
+    }
+
+
+    // Mostrar los datos del cliente
+    cout << "Datos del cliente:" << endl;
+    cout << "Nombre: " << cliente.nombre << endl;
+    cout << "Apellido: " << cliente.apellido << endl;
+    cout << "Dirección: " << cliente.direccion << endl;
+    cout << "Teléfono: " << cliente.telefono << endl;
+    cout << "Saldo: " << cliente.saldo << endl;
+    cout << "Límite de crédito: " << cliente.limite_credito << endl;
+    cout << "Descuento: " << cliente.descuento << endl;
+
+
+
+    //***********************Eliminar el cache*****************************************************+
+
+    // Liberar la memoria de las instancias de clientes
+    for (size_t i = 0; i < clientes.size(); i++) {
+        delete clientes[i];
+    }
+
+
+
+    // Liberar la memoria de las instancias de artículos
+    for (size_t i = 0; i < articulos.size(); i++) {
+        delete articulos[i];
+    }
+
+
+    // Liberar la memoria de las instancias de pedidos
+    for (size_t i = 0; i < pedidos.size(); i++) {
+        delete pedidos[i];
+    }
+
+
+
     // Liberar la memoria de las instancias de fábricas
     for (size_t i = 0; i < fabricas.size(); i++) {
         delete fabricas[i];
     }
-
 
 
     return 0;
