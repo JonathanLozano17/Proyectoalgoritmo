@@ -1,4 +1,4 @@
-//clientes, artículos y pedidos.Hasta el momento se registran los siguientes datos en documentos varios :
+// clientes, artículos y pedidos.Hasta el momento se registran los siguientes datos en documentos varios :
 //• Para cada cliente : Número de cliente(único), Direcciones de envío(varias por cliente), Saldo, Límite de crédito(depende del cliente, pero en ningún caso debe superar los 3.000.000 pts), Descuento.
 //• Para cada artículo : Número de artículo(único), Fábricas que lo distribuyen, Existencias de ese artículo en cada fábrica, Descripción del artículo.
 //• Para cada pedido : Cada pedido tiene una cabecera y el cuerpo del pedido.La cabecera está formada por el número de cliente, dirección de envío y fecha
@@ -12,7 +12,28 @@
 //Nota2 : límite de crédito = 3000.000
 //Nota 3 : mínimo 20 artículos con su stock descripción y precio
 //Nota 4 : proveedor de los artículos
+// 
+//No superar el valor de precio de 3.000.000 y el usuario debe ingresar el nombre y debe comprar y se tiene un inventario y un stock
+//y se va decrementando del stock, y diga cuanto saldo quedo y exista algun articulo que tenga descuento, y diga que cosas se comrparon 
+// y el valor que quedo restante 
 
+//
+//Objetivo: Crear un programa que gestione los clientes, artículos y pedidos de una empresa.
+//
+//Datos :
+//
+//    Cliente : Cada cliente tiene un número único, una o más direcciones de envío, un saldo, un límite de crédito y un descuento.El límite de crédito no puede superar los 3.000.000 pts.
+//    Artículo : Cada artículo tiene un número único, una descripción, un precio y una o más fábricas que lo distribuyen.Cada fábrica tiene un número único, un teléfono de contacto y un stock de cada artículo que provee.Se debe almacenar la información de las fábricas y sus artículos, incluyendo las fábricas alternativas si existen.
+//    Pedido : Cada pedido tiene una cabecera y un cuerpo.La cabecera contiene el número de cliente, la dirección de envío y la fecha(con hora) del pedido.El cuerpo contiene varias líneas, cada una con el número y la cantidad del artículo pedido.
+//    Requisitos :
+//
+//    El programa debe permitir al usuario ingresar su nombre y seleccionar uno de los tres almacenes disponibles.
+//    El programa debe mostrar al usuario los artículos disponibles en el almacén seleccionado, con su descripción, precio y stock.
+//    El programa debe permitir al usuario comprar uno o más artículos, siempre que no se supere el límite de crédito ni el stock del almacén.
+//    El programa debe aplicar el descuento correspondiente al cliente si existe.
+//    El programa debe actualizar el saldo del cliente y el stock del almacén después de cada compra.
+//    El programa debe mostrar al usuario el resumen del pedido, con los artículos comprados, sus precios, el total a pagar y el saldo restante.
+//    El programa debe guardar el pedido en un archivo con la información de la cabecera y el cuerpo.
 
 #include <iostream>
 #include <string>
@@ -254,10 +275,6 @@ public:
 
     }
 
-   
-
-    }
-
 
 
     // Método para agregar artículos
@@ -306,6 +323,7 @@ public:
 
 
 
+
 int main() {
 
 
@@ -316,12 +334,13 @@ int main() {
 
         //Se agrega la informacion a un vector para poder usarlo con un for
     vector<Cliente*> clientes;
-
+    //
     clientes.push_back(new Cliente(1, "Juan", "Pérez", "Calle 123, Ciudad de México", "555-555-5555", 10000, 20000, 10));
     clientes.push_back(new Cliente(2, "Ana", "García", "Calle 456, Bogotá", "333-333-3333", 5000, 10000, 5));
     clientes.push_back(new Cliente(3, "María", "Rodríguez", "Calle 789, Buenos Aires", "222-222-2222", 2000, 5000, 2));
+    //
 
-
+    //
 
 
     // 20 artículos
@@ -399,17 +418,11 @@ int main() {
 
 
 
-
     // Mostrar la información de los artículos en un bucle
     for (size_t i = 0; i < articulos.size(); i++) {
         cout << "Información del Artículo " << i + 1 << ":\n";
         articulos[i]->mostrar();
         cout << "\n";
-    }
-
-    // Liberar la memoria de las instancias de artículos
-    for (size_t i = 0; i < articulos.size(); i++) {
-        delete articulos[i];
     }
 
 
@@ -526,13 +539,13 @@ int main() {
         cout << "Descuento: " << cliente.descuento << endl;
 
 
-    
+
 
         //Finalizar programa
         cout << "Desea continuar? y/n \n";
 
         cin >> continuar;
-    
+
     }
 
 
@@ -574,4 +587,3 @@ int main() {
 
 
 
-  
