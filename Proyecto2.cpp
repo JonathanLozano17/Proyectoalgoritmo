@@ -334,13 +334,11 @@ int main() {
 
         //Se agrega la informacion a un vector para poder usarlo con un for
     vector<Cliente*> clientes;
-    //
+    
     clientes.push_back(new Cliente(1, "Juan", "Pérez", "Calle 123, Ciudad de México", "555-555-5555", 10000, 20000, 10));
     clientes.push_back(new Cliente(2, "Ana", "García", "Calle 456, Bogotá", "333-333-3333", 5000, 10000, 5));
     clientes.push_back(new Cliente(3, "María", "Rodríguez", "Calle 789, Buenos Aires", "222-222-2222", 2000, 5000, 2));
-    //
 
-    //
 
 
     // 20 artículos
@@ -362,7 +360,7 @@ int main() {
     articulos.push_back(new Articulo(11, { 1, 2, 3 }, { 10, 20 }, "Refrigerador", 3000));
     articulos.push_back(new Articulo(12, { 1, 2, 3 }, { 20, 40 }, "Lavadora", 2000));
     articulos.push_back(new Articulo(13, { 1, 2, 3 }, { 10, 20 }, "Televisión inteligente", 5000));
-    articulos.push_back(new Articulo(14, { 1, 2, 3 }, { 20, 40 }, "Horno", 1000));
+    articulos.push_back(new Articulo(14, { 1, 2, 3 }, { 20, 40, 17 }, "Horno", 1000));
     articulos.push_back(new Articulo(15, { 1, 2, 3 }, { 10, 20 }, "Microondas", 500));
     articulos.push_back(new Articulo(16, { 1, 2, 3 }, { 20, 40 }, "Vacuum cleaner", 200));
     articulos.push_back(new Articulo(17, { 1, 2, 3 }, { 10, 20 }, "Tostadora", 100));
@@ -403,7 +401,7 @@ int main() {
     fabricas.push_back(fabrica2);
 
     Fabrica* fabrica3 = new Fabrica(3, "Fábrica 3", "777-777-7777");
-    fabrica3->agregarArticulos({ 13 , 17, 15 });
+    fabrica3->agregarArticulos({ 14 });
     fabricas.push_back(fabrica3);
 
 
@@ -499,14 +497,59 @@ int main() {
        // ID del cliente que está realizando la compra
         int idCliente = 3; // Puedes cambiar esto según tus necesidades
 
-        // Mostrar lista de artículos disponibles
-        for (int i = 0; i < articulos.size(); i++) {
-            cout << "ID: " << articulos[i]->id << ", Descripción: " << articulos[i]->descripcion << ", Precio: " << articulos[i]->precio << ", Existencias: ";
-            for (int j = 0; j < articulos[i]->existencias.size(); j++) {
-                cout << "Fábrica " << articulos[i]->fabricas[j] << ": " << articulos[i]->existencias[j] << " ";
+        
+
+        // Mostrar lista de fábricas y los artículos disponibles en cada fábrica
+        for (int i = 0; i < fabricas.size(); i++) {
+            cout << "ID Fábrica: " << fabricas[i]->id << ", Nombre: " << fabricas[i]->nombre << ", Teléfono: " << fabricas[i]->telefono << endl;
+            cout << "Artículos disponibles: ";
+            for (int j = 0; j < fabricas[i]->articulos.size(); j++) {
+                int articuloID = fabricas[i]->articulos[j];
+                // Buscar el artículo en el vector de artículos
+                for (int k = 0; k < articulos.size(); k++) {
+                    if (articulos[k]->id == articuloID) {
+                        cout << "ID: " << articuloID << ", Descripción: " << articulos[k]->descripcion << ", Precio: " << articulos[k]->precio << ", Existencias: ";
+                        for (int l = 0; l < articulos[k]->fabricas.size(); l++) {
+                            if (articulos[k]->fabricas[l] == fabricas[i]->id) {
+                                cout << "Fábrica " << fabricas[i]->id << ": " << articulos[k]->existencias[l] << " ";
+                            }
+                        }
+                        cout << endl;
+                    }
+                }
             }
             cout << endl;
         }
+
+
+
+        // Solicitar al usuario que ingrese el ID de la fábrica
+        int idFabricaSeleccionada;
+        bool encontrados = false; // Para comprobar si el artículo está en la fábrica
+        cout << "Ingrese el ID de la fábrica deseada: ";
+        cin >> idFabricaSeleccionada;
+
+        // Mostrar artículos disponibles en la fábrica seleccionada
+        cout << "Artículos disponibles en la fábrica " << idFabricaSeleccionada << ":" << endl;
+        for (int i = 0; i < articulos.size(); i++) {
+            encontrados = false; // Para comprobar si el artículo está en la fábrica
+            for (int j = 0; j < articulos[i]->fabricas.size(); j++) {
+                if (articulos[i]->fabricas[j] == idFabricaSeleccionada && articulos[i]->existencias[j] > 0) {
+                    encontrados = true;
+                    break; // Salir del bucle si el artículo se encuentra en la fábrica
+                }
+            }
+            if (encontrados) {
+                cout << "ID: " << articulos[i]->id << ", Descripción: " << articulos[i]->descripcion << ", Precio: " << articulos[i]->precio << endl;
+            }
+        }
+
+        // Si no se encontraron artículos en la fábrica seleccionada
+        if (encontrados == false) {
+            cout << "No se encontraron artículos en la fábrica " << idFabricaSeleccionada << "." << endl;
+        }
+
+
 
         // Permitir al cliente seleccionar un artículo
         int idArticulo;
@@ -528,6 +571,48 @@ int main() {
         }
 
 
+
+
+        if (articuloComprado) {
+            // Verificar si hay suficiente stock del artículo
+            int indiceExistencia = -1; // Índice de la existencia en el vector
+            for (int i = 0; i < articuloComprado->fabricas.size(); i++) {
+                if (articuloComprado->fabricas[i] == idFabricaSeleccionada) {
+                    indiceExistencia = i;
+                    break;
+                }
+            }
+
+            if (indiceExistencia != -1) {
+                if (articuloComprado->existencias[indiceExistencia] >= cantidadComprar) {
+                    // Restar la cantidad comprada de las existencias
+                    articuloComprado->existencias[indiceExistencia] -= cantidadComprar;
+
+                    // Calcula el costo total de la compra
+                    float costoTotal = cantidadComprar * articuloComprado->precio;
+
+                    // Aplica el descuento si existe
+                    costoTotal -= (costoTotal * cliente.descuento / 100);
+
+                    // Restar el costo total al saldo del cliente
+                    cliente.saldo -= costoTotal;
+
+                    // Mostrar un mensaje de compra exitosa
+                    cout << "Compra exitosa. Costo total: " << costoTotal << " Saldo restante: " << cliente.saldo << endl;
+                }
+                else {
+                    cout << "No hay suficiente stock del artículo seleccionado." << endl;
+                }
+            }
+            else {
+                cout << "El artículo seleccionado no está disponible en la fábrica seleccionada." << endl;
+            }
+        }
+        else {
+            cout << "El artículo seleccionado no existe." << endl;
+        }
+
+
         // Mostrar los datos del cliente
         cout << "Datos del cliente:" << endl;
         cout << "Nombre: " << cliente.nombre << endl;
@@ -546,6 +631,7 @@ int main() {
 
         cin >> continuar;
 
+        system("cls");
     }
 
 
@@ -576,6 +662,7 @@ int main() {
         delete fabricas[i];
     }
 
+    
     return 0;
 
 
