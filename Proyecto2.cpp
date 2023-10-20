@@ -351,25 +351,25 @@ int main() {
     vector<Articulo*> articulos;
 
     // Agregar Articulos al vector
-    articulos.push_back(new Articulo(1, { 1, 2 }, { 100, 200 }, "Telefono", 1000));
+    articulos.push_back(new Articulo(1, { 1, 2 }, { 0, 200, 0 }, "Telefono", 1000));
     articulos.push_back(new Articulo(2, { 1, 3 }, { 50, 100, 20 }, "Computadora", 2000));
-    articulos.push_back(new Articulo(3, { 2, 3 }, { 20, 40 }, "Televisor", 3000));
-    articulos.push_back(new Articulo(4, { 1, 2, 3 }, { 30, 60, 10 }, "Tablet", 1500));
+    articulos.push_back(new Articulo(3, { 2, 3 }, { 20, 40, 0 }, "Televisor", 3000));
+    articulos.push_back(new Articulo(4, { 1, 2, 3 }, { 0, 60, 10 }, "Tablet", 1500));
     articulos.push_back(new Articulo(5, { 1, 2, 3 }, { 20,  15, 31 }, "Laptop", 4000));
     articulos.push_back(new Articulo(6, { 1, 2, 3 }, { 10, 20, 30 }, "Impresora", 500));
     articulos.push_back(new Articulo(7, { 1, 2, 3 }, { 20, 40, 70 }, "Escritorio", 1000));
     articulos.push_back(new Articulo(8, { 1, 2, 3 }, { 15, 30, 15 }, "Silla", 250));
-    articulos.push_back(new Articulo(9, { 1, 2, 3 }, { 10, 25,15 }, "Mesa", 500));
+    articulos.push_back(new Articulo(9, { 1, 2, 3 }, { 10, 25,0 }, "Mesa", 500));
     articulos.push_back(new Articulo(10, { 1, 2, 3 }, { 20, 40,25 }, "Cama", 1500));
-    articulos.push_back(new Articulo(11, { 1, 2, 3 }, { 10, 20,25 }, "Refrigerador", 3000));
+    articulos.push_back(new Articulo(11, { 1, 2, 3 }, { 10, 0,25 }, "Refrigerador", 3000));
     articulos.push_back(new Articulo(12, { 1, 2, 3 }, { 20, 40,65 }, "Lavadora", 2000));
-    articulos.push_back(new Articulo(13, { 1, 2, 3 }, { 10, 32, 35 }, "Television inteligente", 5000));
-    articulos.push_back(new Articulo(14, { 1, 2, 3 }, { 20, 40, 35 }, "Horno", 1000));
+    articulos.push_back(new Articulo(13, { 1, 2, 3 }, { 0, 32, 35 }, "Television inteligente", 5000));
+    articulos.push_back(new Articulo(14, { 1, 2, 3 }, { 20, 40, 0 }, "Horno", 1000));
     articulos.push_back(new Articulo(15, { 1, 2, 3 }, { 10, 20,55 }, "Microondas", 500));
     articulos.push_back(new Articulo(16, { 1, 2, 3 }, { 20, 40,15 }, "Vacuum cleaner", 200));
     articulos.push_back(new Articulo(17, { 1, 2, 3 }, { 10, 20,30 }, "Tostadora", 100));
     articulos.push_back(new Articulo(18, { 1, 2, 3 }, { 20, 40,30 }, "Cafetera", 500));
-    articulos.push_back(new Articulo(19, { 1, 2, 3 }, { 20, 40,20 }, "Reloj", 500));
+    articulos.push_back(new Articulo(19, { 1, 2, 3 }, { 20, 0,20 }, "Reloj", 500));
     articulos.push_back(new Articulo(20, { 1, 2, 3 }, { 10, 20, 40 }, "Celular", 1500));
 
 
@@ -500,8 +500,9 @@ int main() {
 
        // ID del cliente que está realizando la compra
         int idCliente = 3; // Puedes cambiar esto según tus necesidades
-
-
+        vector<Articulo*> articulosComprados;
+        int idFabricaSeleccionada;
+        int cantidadComprar;
 
 
         bool usarOtraFabrica = true;
@@ -532,7 +533,6 @@ int main() {
 
 
             // Solicitar al usuario que ingrese el ID de la fábrica
-            int idFabricaSeleccionada;
             bool encontrados = false; // Para comprobar si el artículo está en la fábrica
 
             cout << "Ingrese el ID de la fabrica deseada: ";
@@ -580,7 +580,6 @@ int main() {
 
                     // Permitir al cliente seleccionar un artículo
                     int idArticulo;
-                    int cantidadComprar;
 
 
                     do {
@@ -650,6 +649,8 @@ int main() {
                                     cout << "" << endl;
                                     cout << "Compra exitosa. Costo total: " << costoTotal << " Saldo restante: " << cliente.saldo << endl;
                                     cout << "" << endl;
+                                    articulosComprados.push_back(articuloComprado);
+
                                 }
                                 else {
                                     cout << "" << endl;
@@ -716,6 +717,33 @@ int main() {
         cout << "Saldo: " << cliente.saldo << endl;
         cout << "Limite de credito: " << cliente.limite_credito << endl;
         cout << "Descuento: " << cliente.descuento << endl;
+
+        cout << "Artículos comprados por el cliente:" << endl;
+        for (int i = 0; i < articulosComprados.size(); i++) {
+            cout << "ID: " << articulosComprados[i]->id << ", Descripción: " << articulosComprados[i]->descripcion << ", Precio: " << articulosComprados[i]->precio << endl;
+            
+        }
+
+
+
+        cout << "Artículos comprados por el cliente:" << endl;
+        for (int i = 0; i < articulosComprados.size(); i++) {
+            cout << "ID: " << articulosComprados[i]->id << ", Descripción: " << articulosComprados[i]->descripcion << ", Precio: " << articulosComprados[i]->precio ;
+
+            // Buscar el índice de la fábrica en las fabricas del artículo
+            int fabricaIndex = -1;
+            for (int j = 0; j < articulosComprados[i]->fabricas.size(); j++) {
+                if (articulosComprados[i]->fabricas[j] == idFabricaSeleccionada) {
+                    fabricaIndex = j;
+                    break;
+                }
+            }
+            if (fabricaIndex != -1) {
+                cout << ", Existencias compradas: " << cantidadComprar;
+            }
+
+            cout << endl;
+        }
 
 
 
