@@ -519,7 +519,7 @@ int main() {
                             cout << "ID: " << articuloID << ", Descripcion: " << articulos[k]->descripcion << ", Precio: " << articulos[k]->precio << ", Existencias: ";
                             for (int l = 0; l < articulos[k]->fabricas.size(); l++) {
                                 if (articulos[k]->fabricas[l] == fabricas[i]->id) {
-                                    cout << "Fábrica " << fabricas[i]->id << ": " << articulos[k]->existencias[l] << " ";
+                                    cout << "Fabrica " << fabricas[i]->id << ": " << articulos[k]->existencias[l] << " ";
                                 }
                             }
                             cout << endl;
@@ -534,124 +534,175 @@ int main() {
             // Solicitar al usuario que ingrese el ID de la fábrica
             int idFabricaSeleccionada;
             bool encontrados = false; // Para comprobar si el artículo está en la fábrica
+
             cout << "Ingrese el ID de la fabrica deseada: ";
-            cin >> idFabricaSeleccionada;
-
-
-
-
-
-
-            // Mostrar Articulos disponibles en la fábrica seleccionada
-            cout << "Articulos disponibles en la fabrica " << idFabricaSeleccionada << ":" << endl;
-            for (int i = 0; i < articulos.size(); i++) {
-                encontrados = false; // Para comprobar si el artículo está en la fábrica
-                for (int j = 0; j < articulos[i]->fabricas.size(); j++) {
-                    if (articulos[i]->fabricas[j] == idFabricaSeleccionada && articulos[i]->existencias[j] > 0) {
-                        encontrados = true;
-                        break; // Salir del bucle si el artículo se encuentra en la fábrica
-                    }
-                }
-                if (encontrados) {
-                    cout << "ID: " << articulos[i]->id << ", Descripcion: " << articulos[i]->descripcion << ", Precio: " << articulos[i]->precio << endl;
-                }
+            if (!(cin >> idFabricaSeleccionada)) {
+                cin.clear(); // Restablecer el estado de cin
+                cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Limpiar el búfer de entrada
+                cout << "Entrada no Valida. Por favor, ingrese un Numero Valido." << endl;
             }
-
-            // Si no se encontraron Articulos en la fábrica seleccionada
-            if (encontrados == false) {
-                cout << "No se encontraron Articulos en la fabrica " << idFabricaSeleccionada << "." << endl;
-            }
-
-
-
-            // Permitir al cliente seleccionar un artículo
-            int idArticulo;
-            int cantidadComprar;
-
-
-            do {
-                cout << "Ingrese el ID del artículo que desea comprar: ";
-
-                // Intenta leer el ID del artículo
-                cin >> idArticulo;
-
-                // Verifica si la lectura fue exitosa y si el valor es válido
-                if (cin.fail() || idArticulo < 1 || idArticulo > articulos.size()) {
-                    cout << "ID de artículo no valido. Por favor, ingrese un valor valido." << endl;
-
-                    // Restablece el estado de cin para borrar errores y caracteres no válidos
-                    cin.clear();
-
-                    // Ignora cualquier entrada incorrecta en el buffer
-                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                }
-            } while (cin.fail() || idArticulo < 1 || idArticulo > articulos.size());
-
-            // En este punto, idArticulo contiene un valor válido
-
-
-
-            cout << "Ingrese la cantidad que desea comprar: ";
-            cin >> cantidadComprar;
-
-            // Buscar el artículo seleccionado
-            Articulo* articuloComprado = nullptr;
-            for (int i = 0; i < articulos.size(); i++) {
-                if (articulos[i]->id == idArticulo) {
-                    articuloComprado = articulos[i];
-                    break;
-                }
-            }
-
-
-
-
-            if (articuloComprado) {
-                // Verificar si hay suficiente stock del artículo
-                int indiceExistencia = -1; // Índice de la existencia en el vector
-                for (int i = 0; i < articuloComprado->fabricas.size(); i++) {
-                    if (articuloComprado->fabricas[i] == idFabricaSeleccionada) {
-                        indiceExistencia = i;
+            else {
+                // Validar si el ID de la fábrica seleccionada es válido
+                bool idValido = false;
+                for (int i = 0; i < fabricas.size(); i++) {
+                    if (fabricas[i]->id == idFabricaSeleccionada) {
+                        idValido = true;
                         break;
                     }
                 }
 
-                if (indiceExistencia != -1) {
-                    if (articuloComprado->existencias[indiceExistencia] >= cantidadComprar) {
-                        // Calcula el costo total de la compra
-                        float costoTotal = cantidadComprar * articuloComprado->precio;
 
-                        // Aplica el descuento si existe
-                        costoTotal -= (costoTotal * cliente.descuento / 100);
 
-                        // Verificar si el cliente tiene saldo suficiente para realizar la compra
-                        if (costoTotal <= cliente.saldo) {
-                            // Restar la cantidad comprada de las existencias
-                            articuloComprado->existencias[indiceExistencia] -= cantidadComprar;
+                if (idValido) {
 
-                            // Restar el costo total al saldo del cliente
-                            cliente.saldo -= costoTotal;
 
-                            // Mostrar un mensaje de compra exitosa
-                            cout << "Compra exitosa. Costo total: " << costoTotal << " Saldo restante: " << cliente.saldo << endl;
+                    // Mostrar Articulos disponibles en la fábrica seleccionada
+                    cout << "Articulos disponibles en la fabrica " << idFabricaSeleccionada << ":" << endl;
+                    for (int i = 0; i < articulos.size(); i++) {
+                        encontrados = false; // Para comprobar si el artículo está en la fábrica
+                        for (int j = 0; j < articulos[i]->fabricas.size(); j++) {
+                            if (articulos[i]->fabricas[j] == idFabricaSeleccionada && articulos[i]->existencias[j] > 0) {
+                                encontrados = true;
+                                cout << "ID: " << articulos[i]->id << ", Descripcion: " << articulos[i]->descripcion << ", Precio: " << articulos[i]->precio;
+                                cout << ", Existencias: " << articulos[i]->existencias[j] << endl; // Mostrar las existencias
+                                break; // Salir del bucle si el artículo se encuentra en la fábrica
+                            }
+                        }
+                    }
+
+
+                    // Si no se encontraron Articulos en la fábrica seleccionada
+                    if (encontrados == false) {
+                        cout << "No se encontraron Articulos en la fabrica " << idFabricaSeleccionada << "." << endl;
+                    }
+
+
+
+                    // Permitir al cliente seleccionar un artículo
+                    int idArticulo;
+                    int cantidadComprar;
+
+
+                    do {
+                        cout << "Ingrese el ID del artículo que desea comprar: ";
+
+                        // Intenta leer el ID del artículo
+                        cin >> idArticulo;
+
+                        // Verifica si la lectura fue exitosa y si el valor es válido
+                        if (cin.fail() || idArticulo < 1 || idArticulo > articulos.size()) {
+                            cout << "ID de artículo no valido. Por favor, ingrese un valor valido." << endl;
+
+                            // Restablece el estado de cin para borrar errores y caracteres no válidos
+                            cin.clear();
+
+                            // Ignora cualquier entrada incorrecta en el buffer
+                            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                        }
+                    } while (cin.fail() || idArticulo < 1 || idArticulo > articulos.size());
+
+                    // En este punto, idArticulo contiene un valor válido
+
+
+
+                    cout << "Ingrese la cantidad que desea comprar: ";
+                    cin >> cantidadComprar;
+
+                    // Buscar el artículo seleccionado
+                    Articulo* articuloComprado = nullptr;
+                    for (int i = 0; i < articulos.size(); i++) {
+                        if (articulos[i]->id == idArticulo) {
+                            articuloComprado = articulos[i];
+                            break;
+                        }
+                    }
+
+
+
+
+                    if (articuloComprado) {
+                        // Verificar si hay suficiente stock del artículo
+                        int indiceExistencia = -1; // Índice de la existencia en el vector
+                        for (int i = 0; i < articuloComprado->fabricas.size(); i++) {
+                            if (articuloComprado->fabricas[i] == idFabricaSeleccionada) {
+                                indiceExistencia = i;
+                                break;
+                            }
+                        }
+
+                        if (indiceExistencia != -1) {
+                            if (articuloComprado->existencias[indiceExistencia] >= cantidadComprar) {
+                                // Calcula el costo total de la compra
+                                float costoTotal = cantidadComprar * articuloComprado->precio;
+
+                                // Aplica el descuento si existe
+                                costoTotal -= (costoTotal * cliente.descuento / 100);
+
+                                // Verificar si el cliente tiene saldo suficiente para realizar la compra
+                                if (costoTotal <= cliente.saldo) {
+                                    // Restar la cantidad comprada de las existencias
+                                    articuloComprado->existencias[indiceExistencia] -= cantidadComprar;
+
+                                    // Restar el costo total al saldo del cliente
+                                    cliente.saldo -= costoTotal;
+
+                                    // Mostrar un mensaje de compra exitosa
+                                    cout << "" << endl;
+                                    cout << "Compra exitosa. Costo total: " << costoTotal << " Saldo restante: " << cliente.saldo << endl;
+                                    cout << "" << endl;
+                                }
+                                else {
+                                    cout << "" << endl;
+                                    cout << "El cliente no tiene saldo suficiente para realizar la compra." << endl;
+                                    cout << "" << endl;
+
+                                }
+                            }
+                            else {
+                                cout << "" << endl;
+                                cout << "No hay suficiente stock del artículo seleccionado." << endl;
+                                cout << "" << endl;
+
+                            }
                         }
                         else {
-                            cout << "El cliente no tiene saldo suficiente para realizar la compra." << endl;
+                            cout << "" << endl;
+                            cout << "El artículo seleccionado no está disponible en la fábrica seleccionada." << endl;
+                            cout << "" << endl;
+
                         }
                     }
                     else {
-                        cout << "No hay suficiente stock del artículo seleccionado." << endl;
+                        cout << "" << endl;
+                        cout << "El artículo seleccionado no existe." << endl;
+                        cout << "" << endl;
+
                     }
                 }
+
                 else {
-                    cout << "El artículo seleccionado no está disponible en la fábrica seleccionada." << endl;
+                    cout << "" << endl;
+                    cout << "ID de fábrica no válido. Por favor, ingrese un ID de fábrica válido." << endl;
+                    cout << "" << endl;
                 }
             }
-            else {
-                cout << "El artículo seleccionado no existe." << endl;
+
+
+
+            cout << "Escriba 'q' para salir o cualquier otra tecla para continuar: ";
+            string userInput;
+            cin >> userInput;
+
+            if (userInput == "q") {
+                usarOtraFabrica = false; // Establecer en false para salir del bucle
             }
+
         }
 
+
+
+
+           
 
 
         // Mostrar los datos del cliente
