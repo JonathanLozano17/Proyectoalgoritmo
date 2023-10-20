@@ -333,12 +333,16 @@ int main() {
         // 3 clientes
 
         //Se agrega la informacion a un vector para poder usarlo con un for
+
+
+    //region Lista de clientes
     vector<Cliente*> clientes;
     
     clientes.push_back(new Cliente(1, "Juan", "Pérez", "Calle 123, Ciudad de México", "555-555-5555", 10000, 20000, 10));
     clientes.push_back(new Cliente(2, "Ana", "García", "Calle 456, Bogotá", "333-333-3333", 5000, 10000, 5));
     clientes.push_back(new Cliente(3, "María", "Rodríguez", "Calle 789, Buenos Aires", "222-222-2222", 2000, 5000, 2));
-
+    //endregion
+    
 
 
     // 20 artículos
@@ -348,25 +352,25 @@ int main() {
 
     // Agregar artículos al vector
     articulos.push_back(new Articulo(1, { 1, 2 }, { 100, 200 }, "Teléfono", 1000));
-    articulos.push_back(new Articulo(2, { 1, 3 }, { 50, 100 }, "Computadora", 2000));
+    articulos.push_back(new Articulo(2, { 1, 3 }, { 50, 100, 20 }, "Computadora", 2000));
     articulos.push_back(new Articulo(3, { 2, 3 }, { 20, 40 }, "Televisor", 3000));
-    articulos.push_back(new Articulo(4, { 1, 2, 3 }, { 30, 60 }, "Tablet", 1500));
-    articulos.push_back(new Articulo(5, { 1, 2, 3 }, { 20, 40 }, "Laptop", 4000));
-    articulos.push_back(new Articulo(6, { 1, 2, 3 }, { 10, 20 }, "Impresora", 500));
-    articulos.push_back(new Articulo(7, { 1, 2, 3 }, { 20, 40 }, "Escritorio", 1000));
-    articulos.push_back(new Articulo(8, { 1, 2, 3 }, { 15, 30 }, "Silla", 250));
-    articulos.push_back(new Articulo(9, { 1, 2, 3 }, { 10, 20 }, "Mesa", 500));
-    articulos.push_back(new Articulo(10, { 1, 2, 3 }, { 20, 40 }, "Cama", 1500));
-    articulos.push_back(new Articulo(11, { 1, 2, 3 }, { 10, 20 }, "Refrigerador", 3000));
-    articulos.push_back(new Articulo(12, { 1, 2, 3 }, { 20, 40 }, "Lavadora", 2000));
-    articulos.push_back(new Articulo(13, { 1, 2, 3 }, { 10, 20 }, "Televisión inteligente", 5000));
-    articulos.push_back(new Articulo(14, { 1, 2, 3 }, { 20, 40, 17 }, "Horno", 1000));
-    articulos.push_back(new Articulo(15, { 1, 2, 3 }, { 10, 20 }, "Microondas", 500));
-    articulos.push_back(new Articulo(16, { 1, 2, 3 }, { 20, 40 }, "Vacuum cleaner", 200));
-    articulos.push_back(new Articulo(17, { 1, 2, 3 }, { 10, 20 }, "Tostadora", 100));
-    articulos.push_back(new Articulo(18, { 1, 2, 3 }, { 20, 40 }, "Cafetera", 500));
-    articulos.push_back(new Articulo(19, { 1, 2, 3 }, { 20, 40 }, "Reloj", 500));
-    articulos.push_back(new Articulo(20, { 1, 2, 3 }, { 10, 20 }, "Celular", 1500));
+    articulos.push_back(new Articulo(4, { 1, 2, 3 }, { 30, 60, 10 }, "Tablet", 1500));
+    articulos.push_back(new Articulo(5, { 1, 2, 3 }, { 20,  15, 31 }, "Laptop", 4000));
+    articulos.push_back(new Articulo(6, { 1, 2, 3 }, { 10, 20, 30 }, "Impresora", 500));
+    articulos.push_back(new Articulo(7, { 1, 2, 3 }, { 20, 40, 70 }, "Escritorio", 1000));
+    articulos.push_back(new Articulo(8, { 1, 2, 3 }, { 15, 30, 15 }, "Silla", 250));
+    articulos.push_back(new Articulo(9, { 1, 2, 3 }, { 10, 25,15 }, "Mesa", 500));
+    articulos.push_back(new Articulo(10, { 1, 2, 3 }, { 20, 40,25 }, "Cama", 1500));
+    articulos.push_back(new Articulo(11, { 1, 2, 3 }, { 10, 20,25 }, "Refrigerador", 3000));
+    articulos.push_back(new Articulo(12, { 1, 2, 3 }, { 20, 40,65 }, "Lavadora", 2000));
+    articulos.push_back(new Articulo(13, { 1, 2, 3 }, { 10, 32, 35 }, "Televisión inteligente", 5000));
+    articulos.push_back(new Articulo(14, { 1, 2, 3 }, { 20, 40, 35 }, "Horno", 1000));
+    articulos.push_back(new Articulo(15, { 1, 2, 3 }, { 10, 20,55 }, "Microondas", 500));
+    articulos.push_back(new Articulo(16, { 1, 2, 3 }, { 20, 40,15 }, "Vacuum cleaner", 200));
+    articulos.push_back(new Articulo(17, { 1, 2, 3 }, { 10, 20,30 }, "Tostadora", 100));
+    articulos.push_back(new Articulo(18, { 1, 2, 3 }, { 20, 40,30 }, "Cafetera", 500));
+    articulos.push_back(new Articulo(19, { 1, 2, 3 }, { 20, 40,20 }, "Reloj", 500));
+    articulos.push_back(new Articulo(20, { 1, 2, 3 }, { 10, 20, 40 }, "Celular", 1500));
 
 
 
@@ -459,18 +463,18 @@ int main() {
     cliente.id = 5;
     cliente.apellido = "Pérez";
     cliente.telefono = "555-555-5555";
-    cliente.saldo = 10000;
+    cliente.saldo = 30000;
     cliente.descuento = 0;
 
     // Calcular y asignar el límite de crédito en función del saldo
     if (cliente.saldo >= 10000) {
-        cliente.limite_credito = 3000000; // Límite máximo
+        cliente.limite_credito = 30000; // Límite máximo
     }
     else if (cliente.saldo >= 5000) {
-        cliente.limite_credito = 2000000;
+        cliente.limite_credito = 20000;
     }
     else {
-        cliente.limite_credito = 1000000; // Límite mínimo
+        cliente.limite_credito = 0; // Límite mínimo
     }
 
     //***********************Bucle para Inicializar el programa para realizar el paso a seguir*****************************************************+
@@ -585,20 +589,26 @@ int main() {
 
             if (indiceExistencia != -1) {
                 if (articuloComprado->existencias[indiceExistencia] >= cantidadComprar) {
-                    // Restar la cantidad comprada de las existencias
-                    articuloComprado->existencias[indiceExistencia] -= cantidadComprar;
-
                     // Calcula el costo total de la compra
                     float costoTotal = cantidadComprar * articuloComprado->precio;
 
                     // Aplica el descuento si existe
                     costoTotal -= (costoTotal * cliente.descuento / 100);
 
-                    // Restar el costo total al saldo del cliente
-                    cliente.saldo -= costoTotal;
+                    // Verificar si el cliente tiene saldo suficiente para realizar la compra
+                    if (costoTotal <= cliente.saldo) {
+                        // Restar la cantidad comprada de las existencias
+                        articuloComprado->existencias[indiceExistencia] -= cantidadComprar;
 
-                    // Mostrar un mensaje de compra exitosa
-                    cout << "Compra exitosa. Costo total: " << costoTotal << " Saldo restante: " << cliente.saldo << endl;
+                        // Restar el costo total al saldo del cliente
+                        cliente.saldo -= costoTotal;
+
+                        // Mostrar un mensaje de compra exitosa
+                        cout << "Compra exitosa. Costo total: " << costoTotal << " Saldo restante: " << cliente.saldo << endl;
+                    }
+                    else {
+                        cout << "El cliente no tiene saldo suficiente para realizar la compra." << endl;
+                    }
                 }
                 else {
                     cout << "No hay suficiente stock del artículo seleccionado." << endl;
@@ -613,7 +623,10 @@ int main() {
         }
 
 
+
         // Mostrar los datos del cliente
+        cout << "" << endl;
+        cout << "" << endl;
         cout << "Datos del cliente:" << endl;
         cout << "Nombre: " << cliente.nombre << endl;
         cout << "Apellido: " << cliente.apellido << endl;
